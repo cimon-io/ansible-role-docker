@@ -1,10 +1,1 @@
-{
-  "tls": {{ docker_tls }},
-  "tlscert": "{{ docker_tlscert }}",
-  "tlskey": "{{ docker_tlskey }}",
-  "host": {{ docker_host }},
-  "dns": {{ docker_dns }},
-  "dns-opt": {{ docker_dns_opt }},
-{% if docker_storage_driver|length > 0 %}  "storage": "{{ docker_storage_driver }}",{% endif %}
-  "storage-opt": {{ docker_storage_opt }}
-}
+{{ docker_config | to_nice_json }}
