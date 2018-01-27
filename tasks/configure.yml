@@ -6,7 +6,7 @@
     groups: "docker"
 
 - name: "enable docker service"
-  service:
+  systemd:
     name: docker
     enabled: "{{ docker_service_enabled }}"
 
@@ -16,6 +16,12 @@
     dest: "/etc/docker/daemon.json"
   notify: restart docker
 
+- name: "upload docker service file"
+  template:
+    src: "etc/systemd/system/docker.service.j2"
+    dest: "/etc/systemd/system/docker.service"
+  notify: ["daemon-reload", "restart docker"]
+
 - name: "create tls directory"
   file:
     path: "{{ docker_cert_path }}"
@@ -23,7 +29,9 @@
     mode: 0750
     owner: root
     group: root
-  when: docker_tls == "true"
+  when: ( docker_cert_file   | length > 0 ) or
+        ( docker_key_file    | length > 0 ) or
+        ( docker_cacert_file | length > 0 )
 
 - name: "upload certificates"
   copy:
@@ -32,18 +40,17 @@
     owner: "{{ docker_user }}"
     group: "{{ docker_user }}"
     mode: 0400
-  when: (docker_cert_file|length > 0) and 
-        (docker_key_file|length > 0) and 
-        (docker_tls == "true")
+  when: (docker_cert_file|length > 0) and (docker_key_file|length > 0)
   with_together:
     - ["{{ docker_cert_file }}", "{{ docker_key_file }}"]
-    - ["{{ docker_tlscert }}", "{{ docker_tlskey }}"]
+    - ["{{ docker_config.tlscert | default(docker_cert_path + '/cert.pem') }}",
+       "{{ docker_config.tlskey  | default(docker_cert_path + '/key.pem') }}"]
 
 - name: "upload ca certificate"
   copy:
     src: "{{ docker_cacert_file }}"
-    dest: "{{ docker_tlscacert }}"
+    dest: "{{ docker_config.tlscacert | default(docker_cert_path + '/ca.pem') }}"
     owner: "{{ docker_user }}"
     group: "{{ docker_user }}"
     mode: 0400
-  when: (docker_cacert_file|length > 0) and (docker_tls == "true")
+  when: (docker_cacert_file | length > 0)

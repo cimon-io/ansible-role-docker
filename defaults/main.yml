@@ -2,19 +2,71 @@
 # configure
 docker_user: "deploy"
 
-docker_storage_driver: ""
-docker_storage_opt: "[]"
-
-docker_host: "[]"
-docker_dns: "[]"
-docker_dns_opt: "[]"
+docker_config:
+  #  authorization-plugins: []
+  #  data-root: "/var/lib/docker"
+  #  dns: []
+  #  dns-opts: []
+  #  dns-search: []
+  #  exec-opts: []
+  #  exec-root: "/var/run/docker"
+  #  experimental: false
+  #  storage-driver: ""
+  #  storage-opts: []
+  #  labels: []
+  live-restore: true
+  #  log-driver: ""
+  #  log-opts: {}
+  #  mtu: 0
+  #  pidfile: "/var/run/docker.pid"
+  #  cluster-store: "",
+  #  cluster-store-opts: {},
+  #  cluster-advertise: "",
+  #  max-concurrent-downloads: 3
+  #  max-concurrent-uploads: 5
+  #  default-shm-size: "64M"
+  #  shutdown-timeout: 15
+  #  debug: false
+  hosts: ["fd://"]
+  #  log-level: "info"
+  #  tls: false
+  #  tlsverify: false
+  #  tlscacert: ""
+  #  tlscert: ""
+  #  tlskey: ""
+  #  swarm-default-advertise-addr: ""
+  #  api-cors-header: ""
+  #  selinux-enabled: false
+  #  userns-remap: ""
+  #  group: ""
+  #  cgroup-parent: ""
+  #  default-ulimits: {}
+  #  init: false
+  #  init-path: "/usr/libexec/docker-init"
+  #  ipv6: false
+  #  iptables: true
+  #  ip-forward: true
+  #  ip-masq: true
+  #  userland-proxy: false
+  #  userland-proxy-path: "/usr/libexec/docker-proxy"
+  #  ip: "0.0.0.0"
+  #  bridge: ""
+  #  bip: ""
+  #  fixed-cidr: ""
+  #  fixed-cidr-v6: ""
+  #  default-gateway: ""
+  #  default-gateway-v6: ""
+  #  icc: true
+  #  raw-logs: false
+  #  registry-mirrors: []
+  #  seccomp-profile: ""
+  #  insecure-registries: []
+  #  no-new-privileges: false
+  #  default-runtime: ""
+  #  oom-score-adjust: "-500"
+  #  node-generic-resources: []
 
 docker_cert_path: "~/.docker"
-docker_tls: "false"
-docker_tlscacert: "{{ docker_cert_path }}/ca.pem"
-docker_tlscert: "{{ docker_cert_path }}/cert.pem"
-docker_tlskey: "{{ docker_cert_path}}/key.pem"
-
 docker_cacert_file: ""
 docker_cert_file: ""
 docker_key_file: ""
