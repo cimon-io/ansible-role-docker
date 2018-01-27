@@ -1,0 +1,5 @@
+---
+- hosts: cimon-ansible
+  roles:
+    - role: ansible-role-docker
+      docker_user: vagrant

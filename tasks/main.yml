@@ -1,0 +1,14 @@
+---
+- name: "install docker"
+  include: "install.yml"
+  tags:
+    - docker
+    - docker-install
+
+- name: "configure docker"
+  include: "configure.yml"
+  tags:
+    - docker
+    - docker-configure
+
+- meta: flush_handlers

@@ -1,0 +1,49 @@
+---
+- name: "add user to docker group"
+  user:
+    append: yes
+    name: "{{ docker_user }}"
+    groups: "docker"
+
+- name: "enable docker service"
+  service:
+    name: docker
+    enabled: "{{ docker_service_enabled }}"
+
+- name: "upload docker configuration"
+  template:
+    src: "etc/docker/daemon.json.j2"
+    dest: "/etc/docker/daemon.json"
+  notify: restart docker
+
+- name: "create tls directory"
+  file:
+    path: "{{ docker_cert_path }}"
+    state: directory
+    mode: 0750
+    owner: root
+    group: root
+  when: docker_tls == "true"
+
+- name: "upload certificates"
+  copy:
+    src: "{{ item.0 }}"
+    dest: "{{ item.1 }}"
+    owner: "{{ docker_user }}"
+    group: "{{ docker_user }}"
+    mode: 0400
+  when: (docker_cert_file|length > 0) and 
+        (docker_key_file|length > 0) and 
+        (docker_tls == "true")
+  with_together:
+    - ["{{ docker_cert_file }}", "{{ docker_key_file }}"]
+    - ["{{ docker_tlscert }}", "{{ docker_tlskey }}"]
+
+- name: "upload ca certificate"
+  copy:
+    src: "{{ docker_cacert_file }}"
+    dest: "{{ docker_tlscacert }}"
+    owner: "{{ docker_user }}"
+    group: "{{ docker_user }}"
+    mode: 0400
+  when: (docker_cacert_file|length > 0) and (docker_tls == "true")

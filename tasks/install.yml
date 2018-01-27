@@ -1,0 +1,30 @@
+---
+- name: "add gpg key"
+  apt_key:
+    url: "{{ docker_gpg_key_url }}"
+    state: "{{ docker_state }}"
+
+- name: "add docker repository"
+  apt_repository:
+    repo: "{{ docker_repository }}"
+    state: "{{ docker_state }}"
+
+- name: "add docker repository preferences"
+  template:
+    src: "etc/apt/preferences.d/docker.pref.j2"
+    dest: "/etc/apt/preferences.d/docker.pref"
+
+- name: "install requirements"
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  with_items: "{{ docker_requirements }}"
+
+- name: "install docker"
+  apt:
+    name: "docker-ce"
+    state: "{{ docker_state }}"
+    update_cache: yes
+    cache_valid_time: "{{ apt_cache_valid_time }}"
