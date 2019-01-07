@@ -19,11 +19,10 @@
 
 - name: "install requirements"
   apt:
-    name: "{{ item }}"
+    name: "{{ docker_requirements }}"
     state: present
     update_cache: yes
     cache_valid_time: "{{ apt_cache_valid_time }}"
-  with_items: "{{ docker_requirements }}"
   retries: "{{ remote_package_retries }}"
   register: apt_req_result
   until: apt_req_result is succeeded
