@@ -3,6 +3,9 @@
   apt_key:
     url: "{{ docker_gpg_key_url }}"
     state: "{{ docker_state }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_key_result
+  until: apt_key_result is succeeded
 
 - name: "add docker repository"
   apt_repository:
@@ -21,6 +24,9 @@
     update_cache: yes
     cache_valid_time: "{{ apt_cache_valid_time }}"
   with_items: "{{ docker_requirements }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_req_result
+  until: apt_req_result is succeeded
 
 - name: "install docker"
   apt:
@@ -28,3 +34,6 @@
     state: "{{ docker_state }}"
     update_cache: yes
     cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_result
+  until: apt_result is succeeded
