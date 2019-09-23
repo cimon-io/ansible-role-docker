@@ -71,6 +71,11 @@ docker_cacert_file: ""
 docker_cert_file: ""
 docker_key_file: ""
 
+docker_login_credentials: {}
+#  registry: "https://index.docker.io/v1/"
+#  username: ""
+#  password: ""
+
 # install
 docker_state: "present"
 docker_version: "17.12*"
@@ -81,6 +86,7 @@ docker_requirements:
   - ca-certificates
   - curl
   - gnupg2
+  - python3-pip
   - software-properties-common
 
 docker_gpg_key_url: "https://download.docker.com/linux/{{ ansible_distribution|lower }}/gpg"

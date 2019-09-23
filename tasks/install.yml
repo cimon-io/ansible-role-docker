@@ -27,6 +27,14 @@
   register: apt_req_result
   until: apt_req_result is succeeded
 
+- name: "install docker sdk"
+  pip:
+    name: "docker"
+    state: present
+  retries: "{{ remote_package_retries }}"
+  register: pip_req_result
+  until: pip_req_result is succeeded
+
 - name: "install docker"
   apt:
     name: "docker-ce"

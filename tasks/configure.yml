@@ -54,3 +54,13 @@
     group: "{{ docker_user }}"
     mode: 0400
   when: (docker_cacert_file | length > 0)
+
+- name: "log into private registry and force re-authorization"
+  docker_login:
+    registry: "{{ docker_login_credentials.registry }}"
+    username: "{{ docker_login_credentials.username }}"
+    password: "{{ docker_login_credentials.password }}"
+    reauthorize: yes
+  become: True
+  become_user: "{{ docker_user }}"
+  when: docker_login_credentials | length > 0
