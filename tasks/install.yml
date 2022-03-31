@@ -44,3 +44,12 @@
   retries: "{{ remote_package_retries }}"
   register: apt_result
   until: apt_result is succeeded
+
+- name: "install compose"
+  get_url:
+    url: "{{ docker_compose_url }}"
+    dest: "{{ docker_compose_plugins_dir }}/docker-compose"
+    mode: '0755'
+  retries: "{{ remote_package_retries }}"
+  register: get_result
+  until: get_result is succeeded    
