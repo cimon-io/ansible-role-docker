@@ -45,6 +45,12 @@
   register: apt_result
   until: apt_result is succeeded
 
+- name: "create plugins directory"
+  file:
+    path: "{{ docker_compose_plugins_dir }}"
+    state: directory
+    mode: '0755'
+
 - name: "install compose"
   get_url:
     url: "{{ docker_compose_url }}"
